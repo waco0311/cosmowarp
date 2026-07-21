@@ -6,6 +6,7 @@ electrical power.
 
 Built for **NeoForge 1.21.1**, as an addon for the Create + Cosmonautics ecosystem.
 
+AI is used for coding.
 ---
 
 ## Features
