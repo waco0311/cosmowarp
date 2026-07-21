@@ -1,0 +1,9 @@
+{
+  "type": "create:sandpaper_polishing",
+  "ingredients": [
+    { "item": "cosmowarp:raw_moon_crystal" }
+  ],
+  "results": [
+    { "id": "cosmowarp:moon_crystal", "count": 1 }
+  ]
+}

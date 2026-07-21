@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ETE",
+    "TPT",
+    "ERE"
+  ],
+  "key": {
+    "E": { "item": "create:electron_tube" },
+    "T": { "item": "rocketnautics:titanium_alloy_sheet" },
+    "P": { "item": "create:precision_mechanism" },
+    "R": { "item": "rocketnautics:titanium_casing" }
+  },
+  "result": {
+    "id": "cosmowarp:crystal_driver",
+    "count": 1
+  }
+}

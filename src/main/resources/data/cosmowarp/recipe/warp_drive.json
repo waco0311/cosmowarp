@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    " R ",
+    " E "
+  ],
+  "key": {
+    "P": { "item": "create:precision_mechanism" },
+    "R": { "item": "rocketnautics:titanium_casing" },
+    "E": { "item": "create:electron_tube" }
+  },
+  "result": {
+    "id": "cosmowarp:warp_drive",
+    "count": 1
+  }
+}

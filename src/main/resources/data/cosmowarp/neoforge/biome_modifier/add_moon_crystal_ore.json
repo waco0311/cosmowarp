@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "rocketnautics:lunar_aged_chasm",
+    "rocketnautics:lunar_aged_spikes",
+    "rocketnautics:lunar_basalt_chasm",
+    "rocketnautics:lunar_basalt_spikes",
+    "rocketnautics:lunar_highlands",
+    "rocketnautics:lunar_maria",
+    "rocketnautics:lunar_megaregolith"
+  ],
+  "features": "cosmowarp:moon_crystal_ore",
+  "step": "underground_ores"
+}

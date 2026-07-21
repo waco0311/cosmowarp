@@ -1,0 +1,28 @@
+{
+  "itemGroup.cosmowarp": "Cosmonautics: Warp Drive",
+
+  "item.cosmowarp.raw_moon_crystal": "Raw Moon Crystal",
+  "item.cosmowarp.moon_crystal": "Moon Crystal",
+  "item.cosmowarp.warp_crystal": "Warp Crystal",
+
+  "item.cosmowarp.warp_crystal.tooltip.empty": "No warp points saved",
+  "item.cosmowarp.warp_crystal.tooltip.count": "%s warp point(s) saved:",
+  "item.cosmowarp.warp_crystal.tooltip.more": "...and %s more",
+
+  "block.cosmowarp.moon_crystal_ore": "Moon Crystal Ore",
+  "block.cosmowarp.warp_drive": "Warp Drive",
+  "block.cosmowarp.crystal_driver": "Crystal Driver",
+
+  "gui.cosmowarp.register_here": "Register Here",
+  "gui.cosmowarp.warp": "Warp",
+  "gui.cosmowarp.copy_to_target": "Copy \u2192 2",
+  "gui.cosmowarp.delete": "Delete",
+
+  "message.cosmowarp.warp_failed.no_point_selected": "No warp point selected",
+  "message.cosmowarp.warp_failed.not_enough_power": "Not enough FE (%s required)",
+  "message.cosmowarp.warp_failed.not_physicalized": "Must be physicalized (part of a moving structure) to warp",
+  "message.cosmowarp.warp_failed.invalid_destination": "Destination dimension is not loaded",
+  "message.cosmowarp.warp_failed.already_charging": "Already charging",
+  "message.cosmowarp.warp_failed.not_server": "Warp failed",
+  "message.cosmowarp.warp_charging": "Warp Drive charging..."
+}

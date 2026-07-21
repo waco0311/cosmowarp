@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "cosmowarp:block/hull_top",
+    "bottom": "cosmowarp:block/hull_bottom",
+    "side": "cosmowarp:block/hull_side",
+    "front": "cosmowarp:block/warp_drive_front"
+  }
+}

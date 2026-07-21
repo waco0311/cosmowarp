@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " T ",
+    "TMT",
+    " T "
+  ],
+  "key": {
+    "T": { "item": "rocketnautics:titanium_alloy_sheet" },
+    "M": { "item": "cosmowarp:moon_crystal" }
+  },
+  "result": {
+    "id": "cosmowarp:warp_crystal",
+    "count": 1
+  }
+}
