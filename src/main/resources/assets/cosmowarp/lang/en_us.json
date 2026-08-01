@@ -24,5 +24,11 @@
   "message.cosmowarp.warp_failed.invalid_destination": "Destination dimension is not loaded",
   "message.cosmowarp.warp_failed.already_charging": "Already charging",
   "message.cosmowarp.warp_failed.not_server": "Warp failed",
-  "message.cosmowarp.warp_charging": "Warp Drive charging..."
+  "message.cosmowarp.warp_charging": "Warp Drive charging...",
+  "item.cosmowarp.memory_card": "Memory Card",
+  "item.cosmowarp.memory_card.tooltip.cannot_warp": "Cannot trigger a warp directly",
+  "item.cosmowarp.memory_card.tooltip.empty": "No warp points saved (capacity: %s)",
+  "item.cosmowarp.memory_card.tooltip.count": "%s / %s warp point(s) saved:",
+
+  "message.cosmowarp.warp_failed.not_a_warp_crystal": "A Memory Card cannot trigger a warp -- copy its points to a Warp Crystal with a Crystal Driver first"
 }

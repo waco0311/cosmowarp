@@ -38,13 +38,15 @@ public class WarpDriveMenu extends AbstractContainerMenu {
         }
         this.blockEntity = warpDrive;
 
-        // Crystal slot, only accepts cosmowarp:warp_crystal. Deliberately placed away from the
-        // warp point list's click area (see WarpDriveScreen#mouseClicked) so slot clicks and
-        // list-row clicks never fight over the same screen region.
+        // Crystal slot. Accepts a Warp Crystal (can trigger a warp) or a Memory Card (can
+        // register/hold points but not trigger a warp -- see WarpDriveBlockEntity#beginWarp()).
+        // Deliberately placed away from the warp point list's click area (see
+        // WarpDriveScreen#mouseClicked) so slot clicks and list-row clicks never fight over the
+        // same screen region.
         addSlot(new SlotItemHandler(blockEntity.getCrystalSlot(), 0, CRYSTAL_SLOT_X, CRYSTAL_SLOT_Y) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.WARP_CRYSTAL.get());
+                return stack.is(ModItems.WARP_CRYSTAL.get()) || stack.is(ModItems.MEMORY_CARD.get());
             }
         });
 
@@ -81,7 +83,7 @@ public class WarpDriveMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (stackInSlot.is(ModItems.WARP_CRYSTAL.get())) {
+                if (stackInSlot.is(ModItems.WARP_CRYSTAL.get()) || stackInSlot.is(ModItems.MEMORY_CARD.get())) {
                     if (!moveItemStackTo(stackInSlot, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

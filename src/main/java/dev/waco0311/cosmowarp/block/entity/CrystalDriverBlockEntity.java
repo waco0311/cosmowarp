@@ -1,8 +1,10 @@
 package dev.waco0311.cosmowarp.block.entity;
 
+import dev.waco0311.cosmowarp.Config;
 import dev.waco0311.cosmowarp.data.WarpPoint;
 import dev.waco0311.cosmowarp.menu.CrystalDriverMenu;
 import dev.waco0311.cosmowarp.registry.ModDataComponents;
+import dev.waco0311.cosmowarp.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -25,8 +27,8 @@ import java.util.UUID;
 
 public class CrystalDriverBlockEntity extends BlockEntity implements MenuProvider {
 
-    // Slot 1 = source (the crystal being read from/edited). Slot 2 = target (receives copies).
-    // Both slot data lives entirely on the crystal ItemStacks themselves, same as Warp Drive.
+    // Slot 1 = source (the crystal/card being read from/edited). Slot 2 = target (receives
+    // copies). Both slot data lives entirely on the ItemStacks themselves, same as Warp Drive.
     private final ItemStackHandler slots = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -69,7 +71,10 @@ public class CrystalDriverBlockEntity extends BlockEntity implements MenuProvide
         return !target().isEmpty();
     }
 
-    /** Copies the selected point from the source crystal onto the target crystal (new id, same name/dim/pos). */
+    /**
+     * Copies the selected point from the source crystal/card onto the target (new id, same
+     * name/dim/pos). Refuses if the target is a Memory Card already at its configured capacity.
+     */
     public void copyToTarget() {
         ItemStack src = source();
         ItemStack tgt = target();
@@ -87,12 +92,15 @@ public class CrystalDriverBlockEntity extends BlockEntity implements MenuProvide
         WarpPoint copy = WarpPoint.newlyRegistered(point.name(), point.dimension(), point.pos());
 
         List<WarpPoint> targetPoints = new ArrayList<>(tgt.getOrDefault(ModDataComponents.WARP_POINTS.get(), List.of()));
+        if (tgt.is(ModItems.MEMORY_CARD.get()) && targetPoints.size() >= Config.MEMORY_CARD_CAPACITY.get()) {
+            return; // target Memory Card is full
+        }
         targetPoints.add(copy);
         tgt.set(ModDataComponents.WARP_POINTS.get(), List.copyOf(targetPoints));
         setChanged();
     }
 
-    /** Deletes the selected point from the source crystal. Only allowed while slot 2 is empty. */
+    /** Deletes the selected point from the source crystal/card. Only allowed while slot 2 is empty. */
     public void deleteFromSource() {
         if (hasTarget()) return;
         ItemStack src = source();

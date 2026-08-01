@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TPT",
+    "TET",
+    "TGT"
+  ],
+  "key": {
+    "T": { "item": "rocketnautics:titanium_sheet" },
+    "P": { "item": "minecraft:paper" },
+    "E": { "item": "minecraft:ender_eye" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": {
+    "id": "cosmowarp:memory_card",
+    "count": 1
+  }
+}

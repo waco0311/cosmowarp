@@ -6,20 +6,27 @@ electrical power.
 
 Built for **NeoForge 1.21.1**, as an addon for the Create + Cosmonautics ecosystem.
 
-AI is used for coding.
 ---
 
 ## Features
 
-- **Warp Drive** — a block that, once powered and loaded with a Warp Crystal,
-  can teleport the entire physicalized structure it's part of (via Sable) to a
-  saved location, including across dimensions.
+- **Warp Drive** — a block that, once powered and loaded with a Warp Crystal
+  (or Memory Card), can teleport the entire physicalized structure it's part
+  of (via Sable) to a saved location, including across dimensions. Its
+  console screen shows live info (FE stored, charge countdown, saved
+  coordinates, or the selected point's name — configurable).
 - **Warp Crystal** — the data core. Insert it into a Warp Drive to record the
   drive's current location, or into a Crystal Driver to copy/delete saved
-  locations between crystals.
-- **Crystal Driver** — a workbench-style block for managing Warp Crystals:
-  duplicate a saved coordinate onto a second crystal, or delete one from the
-  first.
+  locations between crystals. Unlike a Memory Card, a Warp Crystal can
+  actually trigger a warp on its own.
+- **Memory Card** — a cheaper recording medium that doesn't require a trip to
+  the Moon to craft. It can register and store locations just like a Warp
+  Crystal, but can't trigger a warp by itself — use a Crystal Driver to copy
+  its saved points onto a Warp Crystal first. Storage capacity is
+  configurable.
+- **Crystal Driver** — a workbench-style block for managing Warp Crystals and
+  Memory Cards: duplicate a saved coordinate from one onto the other, or
+  delete one from the first.
 - **Moon Crystal** — a new resource found only in Cosmonautics' Moon dimension,
   refined with Create's Sand Paper and used to craft Warp Crystals.
 - **Hyperspace jump effect** — a charge-up sequence before each warp, with a
@@ -32,23 +39,27 @@ AI is used for coding.
    pickaxe). It drops **Raw Moon Crystal**.
 2. Refine it into a **Moon Crystal** using Create's Sand Paper (hold the raw
    crystal in one hand, the sand paper in the other, and right-click).
-3. Craft a **Warp Crystal** from the Moon Crystal and Titanium Alloy Sheets.
+3. Craft a **Warp Crystal** from the Moon Crystal and Titanium Alloy Sheets —
+   or, if you don't want to make the trip yet, craft a cheaper **Memory
+   Card** instead.
 4. Craft a **Warp Drive** and place it as part of a Sable-physicalized
    structure (e.g. a Create contraption/airship).
-5. Insert the Warp Crystal into the Warp Drive and press **Register Here** to
-   save the drive's current location and dimension to the crystal.
+5. Insert the Warp Crystal (or Memory Card) into the Warp Drive and press
+   **Register Here** to save the drive's current location and dimension.
 6. Fly (or otherwise physicalize) the structure to another location, insert
-   the same crystal into a Warp Drive there, and register that location too.
-   Repeat as needed — a single crystal can hold multiple saved points, and
-   each one can be renamed from the Warp Drive's GUI.
+   the same crystal/card into a Warp Drive there, and register that location
+   too. Repeat as needed — a single crystal or card can hold multiple saved
+   points, and each one can be renamed from the Warp Drive's GUI.
 7. Back at any saved location, select a destination from the list and press
    **Warp**. The drive consumes FE, plays a short hyperspace charge-up
    sequence, and then moves the whole physicalized structure to the selected
-   point.
+   point. (Only a Warp Crystal can trigger this step — if you've been using a
+   Memory Card, copy its points onto a Warp Crystal with a Crystal Driver
+   first.)
 
-Use a **Crystal Driver** to copy a saved location from one crystal onto
-another (put the source crystal in slot 1 and an empty-list crystal in slot
-2), or to delete a location from a crystal (slot 1 only, slot 2 empty).
+Use a **Crystal Driver** to copy a saved location from one crystal/card onto
+another (put the source in slot 1 and an empty-list crystal/card in slot 2),
+or to delete a location from one (slot 1 only, slot 2 empty).
 
 ## Requirements
 
@@ -72,11 +83,19 @@ another (put the source crystal in slot 1 and an empty-list crystal in slot
 
 Common config (`config/cosmowarp-common.toml`):
 
-| Option | Default | Description |
-|---|---|---|
-| `warpCostFE` | `8,000,000` | FE consumed by a single Warp Drive activation. |
-| `warpChargeTicks` | `60` (3s) | Delay between pressing Warp and the actual jump. |
-| `warpParticleCount` | `32` | Particles spawned around the ship per tick while charging. |
+| Option                 | Default     | Description                                                              |
+| ----------------------- | ----------- | ------------------------------------------------------------------------- |
+| `warpCostFE`             | `8,000,000` | FE consumed by a single Warp Drive activation.                            |
+| `warpChargeTicks`        | `60` (3s)   | Delay between pressing Warp and the actual jump.                          |
+| `warpParticleCount`      | `32`        | Particles spawned around the ship per tick while charging.                |
+| `warpDriveDisplayMode`   | `FE`        | What the Warp Drive's console screen shows: `FE`, `COUNTDOWN`, `COORDINATES`, or `POINT_NAME`. |
+| `memoryCardCapacity`     | `5`         | How many saved locations a single Memory Card can hold (1–10).            |
+
+## A note on development
+
+Large parts of this mod's code were written with the help of AI (Claude).
+Design decisions, testing, and final calls are mine, but I wanted to be
+upfront about the tooling used.
 
 ## Credits
 
@@ -87,12 +106,12 @@ Common config (`config/cosmowarp-common.toml`):
 - [**Dimensional Sable**](https://modrinth.com/mod/dimensional-sable) by
   **hollow_egg** — cross-dimension sub-level support, used directly for the
   actual warp jump.
-- [**Create Cosmonautics**](https://github.com/CosmonauticsTeam/Create-Cosmonautics)
-  by the Cosmonautics Team — the Moon dimension, Titanium items, and
+- [**Create Cosmonautics**](https://github.com/CosmonauticsTeam/Create-Cosmonautics) by the Cosmonautics Team — the Moon dimension, Titanium items, and
   Create/Sable integration this mod builds on top of.
 - [**Create**](https://github.com/Creators-of-Create/Create) by the Create
   team.
+- We received the warpdrive model and textures! Thank you so much!!
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/waco0311/cosmowarp/blob/main/LICENSE)

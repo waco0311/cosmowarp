@@ -25,6 +25,7 @@ public class ModCreativeTab {
                         output.accept(ModItems.MOON_CRYSTAL_ORE.get());
                         output.accept(ModItems.WARP_DRIVE.get());
                         output.accept(ModItems.CRYSTAL_DRIVER.get());
+                        output.accept(ModItems.MEMORY_CARD.get());
                     }).build());
 
     public static void register(net.neoforged.bus.api.IEventBus modEventBus) {

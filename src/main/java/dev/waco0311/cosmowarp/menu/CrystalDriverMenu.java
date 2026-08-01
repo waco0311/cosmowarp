@@ -37,16 +37,18 @@ public class CrystalDriverMenu extends AbstractContainerMenu {
         }
         this.blockEntity = driver;
 
+        // Both slots accept a Warp Crystal or a Memory Card -- either can be a copy source or
+        // target, since the underlying WarpPoint list data works identically for both item types.
         addSlot(new SlotItemHandler(blockEntity.getSlots(), 0, SOURCE_SLOT_X, SOURCE_SLOT_Y) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.WARP_CRYSTAL.get());
+                return stack.is(ModItems.WARP_CRYSTAL.get()) || stack.is(ModItems.MEMORY_CARD.get());
             }
         });
         addSlot(new SlotItemHandler(blockEntity.getSlots(), 1, TARGET_SLOT_X, TARGET_SLOT_Y) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.WARP_CRYSTAL.get());
+                return stack.is(ModItems.WARP_CRYSTAL.get()) || stack.is(ModItems.MEMORY_CARD.get());
             }
         });
 
@@ -73,7 +75,7 @@ public class CrystalDriverMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (stackInSlot.is(ModItems.WARP_CRYSTAL.get())) {
+                if (stackInSlot.is(ModItems.WARP_CRYSTAL.get()) || stackInSlot.is(ModItems.MEMORY_CARD.get())) {
                     if (!moveItemStackTo(stackInSlot, 0, 2, false)) {
                         return ItemStack.EMPTY;
                     }

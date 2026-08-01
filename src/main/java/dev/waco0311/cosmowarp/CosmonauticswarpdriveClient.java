@@ -1,8 +1,10 @@
 package dev.waco0311.cosmowarp;
 
 import dev.waco0311.cosmowarp.client.render.HyperspaceGLRenderer;
+import dev.waco0311.cosmowarp.client.render.WarpDriveBlockEntityRenderer;
 import dev.waco0311.cosmowarp.client.screen.CrystalDriverScreen;
 import dev.waco0311.cosmowarp.client.screen.WarpDriveScreen;
+import dev.waco0311.cosmowarp.registry.ModBlockEntities;
 import dev.waco0311.cosmowarp.registry.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -11,6 +13,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -50,5 +53,10 @@ public class CosmonauticswarpdriveClient {
     static void onRegisterScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.WARP_DRIVE_MENU.get(), WarpDriveScreen::new);
         event.register(ModMenuTypes.CRYSTAL_DRIVER_MENU.get(), CrystalDriverScreen::new);
+    }
+
+    @SubscribeEvent
+    static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.WARP_DRIVE.get(), WarpDriveBlockEntityRenderer::new);
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import dev.waco0311.cosmowarp.item.MemoryCardItem;
 
 public class ModItems {
 
@@ -35,4 +36,8 @@ public class ModItems {
     public static void register(net.neoforged.bus.api.IEventBus modEventBus) {
         ITEMS.register(modEventBus);
     }
+    // Cheap, non-Moon-derived recording medium: can register/store points but cannot itself
+    // trigger a warp. See MemoryCardItem + WarpDriveBlockEntity#beginWarp().
+    public static final DeferredItem<MemoryCardItem> MEMORY_CARD = ITEMS.register("memory_card",
+            () -> new MemoryCardItem(new Item.Properties().stacksTo(1)));
 }

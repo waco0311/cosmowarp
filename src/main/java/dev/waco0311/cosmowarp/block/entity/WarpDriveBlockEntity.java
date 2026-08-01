@@ -4,6 +4,7 @@ import dev.waco0311.cosmowarp.Config;
 import dev.waco0311.cosmowarp.data.WarpPoint;
 import dev.waco0311.cosmowarp.menu.WarpDriveMenu;
 import dev.waco0311.cosmowarp.registry.ModDataComponents;
+import dev.waco0311.cosmowarp.registry.ModItems;
 import dev.ryanhcode.sable.companion.SableCompanion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -72,13 +73,15 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    // Single Warp Crystal slot. All warp point data lives on the crystal ItemStack itself
-    // (ModDataComponents.WARP_POINTS / SELECTED_WARP_POINT), not on this block entity,
-    // so a crystal keeps its list when moved to another Warp Drive or into a Crystal Driver.
+    // Single crystal/card slot. Accepts either a Warp Crystal or a Memory Card. All warp point
+    // data lives on the ItemStack itself (ModDataComponents.WARP_POINTS / SELECTED_WARP_POINT),
+    // not on this block entity, so it keeps its list when moved to another Warp Drive or into a
+    // Crystal Driver.
     private final ItemStackHandler crystalSlot = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             syncToClient();
+            updateHasCrystalState();
         }
     };
 
@@ -113,11 +116,17 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         syncToClient();
     }
 
-    /** Registers this Warp Drive's current position/dimension as a new entry on the inserted crystal. */
+    /**
+     * Registers this Warp Drive's current position/dimension as a new entry on the inserted
+     * crystal/card. Refuses if a Memory Card is already at its configured capacity.
+     */
     public void registerHere() {
         if (level == null) return;
         ItemStack stack = crystal();
         if (stack.isEmpty()) return;
+        if (stack.is(ModItems.MEMORY_CARD.get()) && getWarpPoints().size() >= Config.MEMORY_CARD_CAPACITY.get()) {
+            return; // Memory Card is full
+        }
 
         // If this Warp Drive is physicalized (part of a Sable sub-level), worldPosition is a raw
         // plot-storage position with extreme values, not the real rendered position. Companion
@@ -182,11 +191,14 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
     /**
      * Validates the warp and, if everything checks out, consumes FE and starts the charge-up
      * countdown (see tick()). The actual sub-level move happens in executeWarp() once the
-     * countdown reaches 0, not here.
+     * countdown reaches 0, not here. Only an actual Warp Crystal can trigger a warp -- a Memory
+     * Card can register/hold points but not warp directly (copy its points to a Warp Crystal via
+     * a Crystal Driver first).
      */
     public WarpResult beginWarp() {
         if (level == null || level.isClientSide) return WarpResult.NOT_SERVER;
         if (isCharging()) return WarpResult.ALREADY_CHARGING;
+        if (!crystal().is(ModItems.WARP_CRYSTAL.get())) return WarpResult.NOT_A_WARP_CRYSTAL;
 
         Optional<UUID> selected = getSelectedId();
         if (selected.isEmpty()) return WarpResult.NO_POINT_SELECTED;
@@ -396,7 +408,8 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         NOT_SERVER,
         NOT_PHYSICALIZED,
         INVALID_DESTINATION,
-        ALREADY_CHARGING
+        ALREADY_CHARGING,
+        NOT_A_WARP_CRYSTAL
     }
 
     @Override
@@ -414,6 +427,18 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         setChanged();
         if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+    }
+
+    /** Keeps the WarpDriveBlock#HAS_CRYSTAL blockstate in sync with whether the slot is occupied. */
+    private void updateHasCrystalState() {
+        if (level == null || level.isClientSide) return;
+        BlockState state = getBlockState();
+        if (!(state.getBlock() instanceof dev.waco0311.cosmowarp.block.WarpDriveBlock)) return;
+
+        boolean hasCrystal = !crystal().isEmpty();
+        if (state.getValue(dev.waco0311.cosmowarp.block.WarpDriveBlock.HAS_CRYSTAL) != hasCrystal) {
+            level.setBlock(worldPosition, state.setValue(dev.waco0311.cosmowarp.block.WarpDriveBlock.HAS_CRYSTAL, hasCrystal), 3);
         }
     }
 

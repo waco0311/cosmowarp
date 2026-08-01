@@ -1,8 +1,13 @@
 {
   "variants": {
-    "facing=north": { "model": "cosmowarp:block/warp_drive" },
-    "facing=south": { "model": "cosmowarp:block/warp_drive", "y": 180 },
-    "facing=west":  { "model": "cosmowarp:block/warp_drive", "y": 270 },
-    "facing=east":  { "model": "cosmowarp:block/warp_drive", "y": 90 }
+    "facing=north,has_crystal=false": { "model": "cosmowarp:block/warp_drive_empty" },
+    "facing=south,has_crystal=false": { "model": "cosmowarp:block/warp_drive_empty", "y": 180 },
+    "facing=west,has_crystal=false":  { "model": "cosmowarp:block/warp_drive_empty", "y": 270 },
+    "facing=east,has_crystal=false":  { "model": "cosmowarp:block/warp_drive_empty", "y": 90 },
+
+    "facing=north,has_crystal=true": { "model": "cosmowarp:block/warp_drive" },
+    "facing=south,has_crystal=true": { "model": "cosmowarp:block/warp_drive", "y": 180 },
+    "facing=west,has_crystal=true":  { "model": "cosmowarp:block/warp_drive", "y": 270 },
+    "facing=east,has_crystal=true":  { "model": "cosmowarp:block/warp_drive", "y": 90 }
   }
 }
