@@ -42,6 +42,11 @@ public class Cosmonauticswarpdrive {
         NeoForge.EVENT_BUS.register(this);
 
         modContainer.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, Config.SPEC);
+
+        dev.waco0311.cosmowarp.advancement.ModTriggers.TRIGGER_TYPES.register(modEventBus);
+
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(dev.waco0311.cosmowarp.client.ModClientCommands::register);
+        dev.waco0311.cosmowarp.client.WarpEffectClient.registerSafetyNet();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

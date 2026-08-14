@@ -111,6 +111,11 @@ upfront about the tooling used.
 - [**Create**](https://github.com/Creators-of-Create/Create) by the Create
   team.
 - We received the warpdrive model and textures! Thank you so much!!
+- **New Mod Icon**<br>
+  Author: Devina_X<br>
+  Work: Create Cosmonautics Expansion
+
+
 
 ## License
 

@@ -9,6 +9,9 @@ import dev.ryanhcode.sable.companion.SableCompanion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -119,13 +122,18 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
     /**
      * Registers this Warp Drive's current position/dimension as a new entry on the inserted
      * crystal/card. Refuses if a Memory Card is already at its configured capacity.
+     *
+     * @return true if a point was actually registered (false on any of the early-return cases
+     *         below) -- the caller (ModNetworking) uses this to decide whether to fire the
+     *         cosmowarp:register_location advancement trigger, so it must only be true on an
+     *         actual successful registration.
      */
-    public void registerHere() {
-        if (level == null) return;
+    public boolean registerHere() {
+        if (level == null) return false;
         ItemStack stack = crystal();
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty()) return false;
         if (stack.is(ModItems.MEMORY_CARD.get()) && getWarpPoints().size() >= Config.MEMORY_CARD_CAPACITY.get()) {
-            return; // Memory Card is full
+            return false; // Memory Card is full
         }
 
         // If this Warp Drive is physicalized (part of a Sable sub-level), worldPosition is a raw
@@ -145,6 +153,7 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         stack.set(ModDataComponents.WARP_POINTS.get(), List.copyOf(updated));
         stack.set(ModDataComponents.SELECTED_WARP_POINT.get(), point.id());
         syncToClient();
+        return true;
     }
 
     /** Renames the point with the given id in place (id stays stable). */
@@ -178,6 +187,11 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
     // --- charge-up state (Warp button starts a countdown; the actual jump happens when it hits 0) ---
     private int chargeTicksRemaining = 0;
     private UUID chargingTargetId = null;
+    // IMPORTANT: this must be persisted (see saveAdditional/loadAdditional) -- if this block entity
+    // gets saved/reloaded while still charging (chunk unload/reload, or a Sable warp relocating the
+    // whole physicalized structure this drive is attached to), losing this list means the eventual
+    // executeWarp() has no one left to send the STOP-effect packet to, and whichever player(s) were
+    // watching the hyperspace effect get stuck with it on forever (previously-reported bug).
     private java.util.List<UUID> chargingEffectPlayers = java.util.List.of();
 
     public boolean isCharging() {
@@ -398,6 +412,14 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
                 net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, net.minecraft.sounds.SoundSource.BLOCKS,
                 1.0f, 1.0f);
 
+        // Fire the "First Jump"/"Across the Void" advancement triggers for everyone who actually
+        // made the trip -- only reached once the warp itself has genuinely succeeded (every
+        // early-return failure case above skips this).
+        boolean crossDimension = !serverLevel.dimension().equals(destLevel.dimension());
+        for (net.minecraft.server.level.ServerPlayer effectPlayer : effectPlayers) {
+            dev.waco0311.cosmowarp.advancement.ModTriggers.WARP_PERFORMED.get().trigger(effectPlayer, crossDimension);
+        }
+
         setChanged();
     }
 
@@ -469,6 +491,14 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         if (chargingTargetId != null) {
             tag.putUUID("ChargingTargetId", chargingTargetId);
         }
+        // See the field comment on chargingEffectPlayers for why this must survive save/reload.
+        if (!chargingEffectPlayers.isEmpty()) {
+            ListTag effectPlayersTag = new ListTag();
+            for (UUID id : chargingEffectPlayers) {
+                effectPlayersTag.add(NbtUtils.createUUID(id));
+            }
+            tag.put("ChargingEffectPlayers", effectPlayersTag);
+        }
     }
 
     @Override
@@ -480,5 +510,16 @@ public class WarpDriveBlockEntity extends BlockEntity implements MenuProvider {
         }
         chargeTicksRemaining = tag.getInt("ChargeTicksRemaining");
         chargingTargetId = tag.hasUUID("ChargingTargetId") ? tag.getUUID("ChargingTargetId") : null;
+
+        if (tag.contains("ChargingEffectPlayers")) {
+            ListTag effectPlayersTag = tag.getList("ChargingEffectPlayers", Tag.TAG_INT_ARRAY);
+            List<UUID> ids = new ArrayList<>(effectPlayersTag.size());
+            for (Tag idTag : effectPlayersTag) {
+                ids.add(NbtUtils.loadUUID(idTag));
+            }
+            chargingEffectPlayers = List.copyOf(ids);
+        } else {
+            chargingEffectPlayers = List.of();
+        }
     }
 }

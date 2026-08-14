@@ -63,7 +63,11 @@ public class ModNetworking {
             WarpDriveBlockEntity warpDrive = menu.blockEntity;
 
             switch (payload.action()) {
-                case REGISTER_HERE -> warpDrive.registerHere();
+                case REGISTER_HERE -> {
+                    if (warpDrive.registerHere()) {
+                        dev.waco0311.cosmowarp.advancement.ModTriggers.REGISTER_LOCATION.get().trigger(player);
+                    }
+                }
                 case WARP -> {
                     WarpDriveBlockEntity.WarpResult result = warpDrive.beginWarp();
                     if (result == WarpDriveBlockEntity.WarpResult.SUCCESS) {

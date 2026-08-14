@@ -18,6 +18,30 @@
   "gui.cosmowarp.copy_to_target": "Copy \u2192 2",
   "gui.cosmowarp.delete": "Delete",
 
+  "advancements.cosmowarp.root.title": "Cosmonautics: Warp Drive",
+  "advancements.cosmowarp.root.description": "Bend spacetime with stored power.",
+
+  "advancements.cosmowarp.moonstruck.title": "Moonstruck",
+  "advancements.cosmowarp.moonstruck.description": "Refine a Raw Moon Crystal into a Moon Crystal.",
+
+  "advancements.cosmowarp.star_chart.title": "Crystal Clear",
+  "advancements.cosmowarp.star_chart.description": "Craft a Warp Crystal.",
+
+  "advancements.cosmowarp.cutting_corners.title": "Cutting Corners",
+  "advancements.cosmowarp.cutting_corners.description": "Craft a Memory Card \u2014 no trip to the Moon required.",
+
+  "advancements.cosmowarp.copy_that.title": "Copy That",
+  "advancements.cosmowarp.copy_that.description": "Craft a Crystal Driver.",
+
+  "advancements.cosmowarp.point_of_no_return.title": "Point of No Return",
+  "advancements.cosmowarp.point_of_no_return.description": "Register a location on a Warp Drive.",
+
+  "advancements.cosmowarp.first_jump.title": "Engage!",
+  "advancements.cosmowarp.first_jump.description": "Experience your first warp.",
+
+  "advancements.cosmowarp.across_the_void.title": "Beam Me Up",
+  "advancements.cosmowarp.across_the_void.description": "Warp between two different dimensions in a single jump.",
+
   "message.cosmowarp.warp_failed.no_point_selected": "No warp point selected",
   "message.cosmowarp.warp_failed.not_enough_power": "Not enough FE (%s required)",
   "message.cosmowarp.warp_failed.not_physicalized": "Must be physicalized (part of a moving structure) to warp",
@@ -29,6 +53,6 @@
   "item.cosmowarp.memory_card.tooltip.cannot_warp": "Cannot trigger a warp directly",
   "item.cosmowarp.memory_card.tooltip.empty": "No warp points saved (capacity: %s)",
   "item.cosmowarp.memory_card.tooltip.count": "%s / %s warp point(s) saved:",
-
+  "command.cosmowarp.clearhyperspace.success": "Hyperspace effect cleared.",
   "message.cosmowarp.warp_failed.not_a_warp_crystal": "A Memory Card cannot trigger a warp -- copy its points to a Warp Crystal with a Crystal Driver first"
 }

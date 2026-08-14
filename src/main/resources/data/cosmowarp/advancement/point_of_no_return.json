@@ -1,0 +1,17 @@
+{
+  "parent": "cosmowarp:root",
+  "display": {
+    "icon": { "id": "cosmowarp:warp_crystal" },
+    "title": { "translate": "advancements.cosmowarp.point_of_no_return.title" },
+    "description": { "translate": "advancements.cosmowarp.point_of_no_return.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "registered": {
+      "trigger": "cosmowarp:register_location",
+      "conditions": {}
+    }
+  }
+}

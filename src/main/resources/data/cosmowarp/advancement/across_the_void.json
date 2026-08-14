@@ -1,0 +1,17 @@
+{
+  "parent": "cosmowarp:first_jump",
+  "display": {
+    "icon": { "id": "minecraft:ender_pearl" },
+    "title": { "translate": "advancements.cosmowarp.across_the_void.title" },
+    "description": { "translate": "advancements.cosmowarp.across_the_void.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "warped_cross_dimension": {
+      "trigger": "cosmowarp:warp_performed",
+      "conditions": { "cross_dimension": true }
+    }
+  }
+}

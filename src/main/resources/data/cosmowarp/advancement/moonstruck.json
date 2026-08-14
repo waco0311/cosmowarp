@@ -1,0 +1,19 @@
+{
+  "parent": "cosmowarp:root",
+  "display": {
+    "icon": { "id": "cosmowarp:moon_crystal" },
+    "title": { "translate": "advancements.cosmowarp.moonstruck.title" },
+    "description": { "translate": "advancements.cosmowarp.moonstruck.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "obtained_moon_crystal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [ { "items": ["cosmowarp:moon_crystal"] } ]
+      }
+    }
+  }
+}

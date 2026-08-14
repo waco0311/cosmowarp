@@ -1,0 +1,17 @@
+{
+  "parent": "cosmowarp:point_of_no_return",
+  "display": {
+    "icon": { "id": "cosmowarp:warp_drive" },
+    "title": { "translate": "advancements.cosmowarp.first_jump.title" },
+    "description": { "translate": "advancements.cosmowarp.first_jump.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "warped": {
+      "trigger": "cosmowarp:warp_performed",
+      "conditions": {}
+    }
+  }
+}

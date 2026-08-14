@@ -1,0 +1,19 @@
+{
+  "parent": "cosmowarp:root",
+  "display": {
+    "icon": { "id": "cosmowarp:crystal_driver" },
+    "title": { "translate": "advancements.cosmowarp.copy_that.title" },
+    "description": { "translate": "advancements.cosmowarp.copy_that.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "obtained_crystal_driver": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [ { "items": ["cosmowarp:crystal_driver"] } ]
+      }
+    }
+  }
+}

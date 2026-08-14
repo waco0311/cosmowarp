@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": { "id": "cosmowarp:warp_drive" },
+    "title": { "translate": "advancements.cosmowarp.root.title" },
+    "description": { "translate": "advancements.cosmowarp.root.description" },
+    "background": "minecraft:textures/block/deepslate.png",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "obtained_recording_medium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": ["cosmowarp:warp_crystal", "cosmowarp:memory_card"] }
+        ]
+      }
+    }
+  }
+}

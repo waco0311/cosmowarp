@@ -1,0 +1,19 @@
+{
+  "parent": "cosmowarp:root",
+  "display": {
+    "icon": { "id": "cosmowarp:memory_card" },
+    "title": { "translate": "advancements.cosmowarp.cutting_corners.title" },
+    "description": { "translate": "advancements.cosmowarp.cutting_corners.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "obtained_memory_card": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [ { "items": ["cosmowarp:memory_card"] } ]
+      }
+    }
+  }
+}
