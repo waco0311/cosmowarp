@@ -35,6 +35,11 @@ public class WarpDriveScreen extends AbstractContainerScreen<WarpDriveMenu> {
     private static final int LIST_ROWS = 6;
     private static final int LIST_H = ROW_H * LIST_ROWS; // 84, list ends at 114
 
+    // Scrollbar sits in the gap between the list and the right-hand column, so it never eats
+    // into the row text width.
+    private static final int SCROLLBAR_W = 3;
+    private static final int SCROLLBAR_X = LIST_X + LIST_W + 3;
+
     private static final int REGISTER_Y = LIST_Y + LIST_H + 8; // 122
 
     private static final int RIGHT_X = LIST_X + LIST_W + 12; // 122
@@ -62,11 +67,19 @@ public class WarpDriveScreen extends AbstractContainerScreen<WarpDriveMenu> {
     private static final int COLOR_TEXT = 0xFFE4E4E4;
     private static final int COLOR_TEXT_MUTED = 0xFF9A9A9A;
     private static final int COLOR_SLOT_BG = 0xFF3A3A3A;
+    private static final int COLOR_SCROLLBAR_TRACK = 0xFF141414;
+    private static final int COLOR_SCROLLBAR_THUMB = 0xFF6A6A6A;
 
     private List<WarpPoint> cachedPoints = List.of();
     private UUID selected = null;
     private EditBox nameBox;
     private Button warpButton;
+
+    // How many rows the list is scrolled down by. 0 = showing the first LIST_ROWS points.
+    // Kept clamped to [0, maxScroll()] any time cachedPoints changes (see clampScroll()), since
+    // the underlying list can shrink out from under an existing scroll position (e.g. a point
+    // gets deleted elsewhere, or the crystal is swapped for one with fewer saved points).
+    private int scrollOffset = 0;
 
     public WarpDriveScreen(WarpDriveMenu menu, net.minecraft.world.entity.player.Inventory inv, Component title) {
         super(menu, inv, title);
@@ -115,8 +128,17 @@ public class WarpDriveScreen extends AbstractContainerScreen<WarpDriveMenu> {
         if (point != null) nameBox.setValue(point.name());
     }
 
+    private int maxScroll() {
+        return Math.max(0, cachedPoints.size() - LIST_ROWS);
+    }
+
+    private void clampScroll() {
+        scrollOffset = Math.max(0, Math.min(scrollOffset, maxScroll()));
+    }
+
     private void refreshFromCrystal() {
         cachedPoints = menu.blockEntity.getWarpPoints();
+        clampScroll();
         selected = menu.blockEntity.getSelectedId().orElse(null);
         if (selected != null && !nameBox.isFocused()) {
             cachedPoints.stream().filter(p -> p.id().equals(selected)).findFirst()
@@ -155,12 +177,25 @@ public class WarpDriveScreen extends AbstractContainerScreen<WarpDriveMenu> {
         graphics.fill(leftPos + LIST_X - 2, topPos + LIST_Y - 2,
                 leftPos + LIST_X + LIST_W + 2, topPos + LIST_Y + LIST_H + 2, COLOR_LIST_BG);
 
-        for (int i = 0; i < Math.min(cachedPoints.size(), LIST_ROWS); i++) {
-            WarpPoint p = cachedPoints.get(i);
+        int visibleCount = Math.min(LIST_ROWS, cachedPoints.size() - scrollOffset);
+        for (int i = 0; i < visibleCount; i++) {
+            WarpPoint p = cachedPoints.get(scrollOffset + i);
             int rowY = topPos + LIST_Y + i * ROW_H;
             int color = p.id().equals(selected) ? COLOR_ROW_SELECTED : COLOR_ROW;
             graphics.fill(leftPos + LIST_X, rowY, leftPos + LIST_X + LIST_W, rowY + ROW_H - 1, color);
             graphics.drawString(font, trimToWidth(p.name(), LIST_W - 6), leftPos + LIST_X + 3, rowY + 3, COLOR_TEXT, false);
+        }
+
+        // --- scrollbar (only when there's actually something to scroll to) ---
+        if (cachedPoints.size() > LIST_ROWS) {
+            int trackX = leftPos + SCROLLBAR_X;
+            int trackY = topPos + LIST_Y;
+            graphics.fill(trackX, trackY, trackX + SCROLLBAR_W, trackY + LIST_H, COLOR_SCROLLBAR_TRACK);
+
+            int thumbH = Math.max(8, LIST_H * LIST_ROWS / cachedPoints.size());
+            int maxThumbY = LIST_H - thumbH;
+            int thumbY = maxScroll() == 0 ? 0 : maxThumbY * scrollOffset / maxScroll();
+            graphics.fill(trackX, trackY + thumbY, trackX + SCROLLBAR_W, trackY + thumbY + thumbH, COLOR_SCROLLBAR_THUMB);
         }
 
         // --- FE bar ---
@@ -220,14 +255,20 @@ public class WarpDriveScreen extends AbstractContainerScreen<WarpDriveMenu> {
         return text + "..";
     }
 
+    private boolean isOverList(double mouseX, double mouseY) {
+        return mouseX >= leftPos + LIST_X && mouseX <= leftPos + LIST_X + LIST_W
+                && mouseY >= topPos + LIST_Y && mouseY <= topPos + LIST_Y + LIST_H;
+    }
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (int i = 0; i < Math.min(cachedPoints.size(), LIST_ROWS); i++) {
+        int visibleCount = Math.min(LIST_ROWS, cachedPoints.size() - scrollOffset);
+        for (int i = 0; i < visibleCount; i++) {
             int rowY = topPos + LIST_Y + i * ROW_H;
             if (mouseX >= leftPos + LIST_X && mouseX <= leftPos + LIST_X + LIST_W
                     && mouseY >= rowY && mouseY <= rowY + ROW_H - 1) {
                 nameBox.setFocused(false);
-                selectPoint(cachedPoints.get(i).id());
+                selectPoint(cachedPoints.get(scrollOffset + i).id());
                 return true;
             }
         }
@@ -241,6 +282,16 @@ public class WarpDriveScreen extends AbstractContainerScreen<WarpDriveMenu> {
         }
 
         return handled;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (isOverList(mouseX, mouseY) && cachedPoints.size() > LIST_ROWS) {
+            scrollOffset -= (int) Math.signum(scrollY);
+            clampScroll();
+            return true;
+        }
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override
