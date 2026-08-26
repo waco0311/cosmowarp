@@ -32,6 +32,9 @@ Built for **NeoForge 1.21.1**, as an addon for the Create + Cosmonautics ecosyst
 - **Hyperspace jump effect** — a charge-up sequence before each warp, with a
   screen-distortion effect (visible only to players actually riding the ship)
   and a converging-particle effect (visible to everyone nearby).
+- **CC: Tweaked support** — the Warp Drive works as a peripheral, so computers
+  can read its status and drive it from Lua. Optional; the mod works fine
+  without CC: Tweaked installed.
 
 ## How it works
 
@@ -75,9 +78,51 @@ or to delete a location from one (slot 1 only, slot 2 empty).
   a separate install usually isn't required, but it must be present one way
   or the other.
 
+Optional:
+
+- [CC: Tweaked](https://modrinth.com/mod/cc-tweaked) — enables the Warp Drive's
+  computer peripheral (see below).
+
 > **Note:** This mod does not generate FE on its own. Add any mod that
 > produces Forge Energy (Create's generators, Mekanism, Thermal, etc.) to
 > actually power the Warp Drive.
+
+## CC: Tweaked
+
+With CC: Tweaked installed, a Warp Drive can be used as a peripheral of type
+`warp_drive` — attach a computer directly or over a wired modem.
+
+| Method | Returns |
+| ------- | -------- |
+| `getEnergy()` | Current FE stored. |
+| `getEnergyCapacity()` | Maximum FE. |
+| `getWarpCost()` | FE consumed per warp (server's config value). |
+| `hasCrystal()` | Whether a Warp Crystal or Memory Card is inserted. |
+| `getWarpPoints()` | 1-indexed array of `{id, name, x, y, z, dimension, selected}`. |
+| `getSelectedPoint()` | One such table, or `nil` if nothing is selected. |
+| `selectPoint(indexOrNameOrId)` | `true` if a matching point was found. |
+| `registerHere()` | Saves the drive's current location. `true` on success. |
+| `renamePoint(indexOrNameOrId, newName)` | `true` if renamed. |
+| `warp()` | `true`, or `false` plus a reason string. |
+| `isCharging()` | Whether a charge-up is running. |
+| `getChargeSeconds()` | Seconds left in the charge-up, `0` when idle. |
+
+`warp()` begins the charge-up rather than jumping instantly, exactly like
+pressing Warp in the GUI. Its failure reasons are `no_point_selected`,
+`not_enough_power`, `not_physicalized`, `invalid_destination`,
+`already_charging`, `not_a_warp_crystal`, and `not_server`.
+
+Two example programs are included in the repository under
+[`examples/`](https://github.com/waco0311/cosmowarp/tree/main/examples):
+`warp.lua` prints the drive's status and warps to a chosen point, and
+`warp_monitor.lua` draws a touch-controlled interface on an Advanced Monitor
+with an energy bar, a selectable list of destinations, and a Warp button.
+Both are starting points to edit rather than finished programs — the
+peripheral deliberately exposes data and controls only, so the interface is
+yours to design.
+
+Note that actions taken through the peripheral don't grant advancements, since
+there's no player attached to a computer call.
 
 ## Configuration
 
@@ -85,11 +130,15 @@ Common config (`config/cosmowarp-common.toml`):
 
 | Option                 | Default     | Description                                                              |
 | ----------------------- | ----------- | ------------------------------------------------------------------------- |
-| `warpCostFE`             | `8,000,000` | FE consumed by a single Warp Drive activation.                            |
+| `warpCostFE`             | `2,000,000` | FE consumed by a single Warp Drive activation.                            |
 | `warpChargeTicks`        | `60` (3s)   | Delay between pressing Warp and the actual jump.                          |
 | `warpParticleCount`      | `32`        | Particles spawned around the ship per tick while charging.                |
 | `warpDriveDisplayMode`   | `FE`        | What the Warp Drive's console screen shows: `FE`, `COUNTDOWN`, `COORDINATES`, or `POINT_NAME`. |
 | `memoryCardCapacity`     | `5`         | How many saved locations a single Memory Card can hold (1–10).            |
+
+> Config files are only written once, so worlds created before a default
+> changes keep the old value. To pick up a new default, edit
+> `config/cosmowarp-common.toml` directly or delete it and let it regenerate.
 
 ## A note on development
 

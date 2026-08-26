@@ -59,6 +59,9 @@ public class Cosmonauticswarpdrive {
                 (be, side) -> be.getEnergyStorage());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.WARP_DRIVE.get(),
                 (be, side) -> be.getCrystalSlot());
+        if (net.neoforged.fml.ModList.get().isLoaded("computercraft")) {
+            dev.waco0311.cosmowarp.compat.computercraft.ComputerCraftCompat.registerPeripherals(event);
+        }
     }
 
     @SubscribeEvent

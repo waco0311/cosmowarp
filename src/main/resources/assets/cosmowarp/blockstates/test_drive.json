@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "cosmowarp:block/test_drive" },
+    "facing=south": { "model": "cosmowarp:block/test_drive", "y": 180 },
+    "facing=west":  { "model": "cosmowarp:block/test_drive", "y": 270 },
+    "facing=east":  { "model": "cosmowarp:block/test_drive", "y": 90 }
+  }
+}

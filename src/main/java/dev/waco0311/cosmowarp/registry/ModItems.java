@@ -33,6 +33,10 @@ public class ModItems {
     public static final DeferredItem<BlockItem> WARP_DRIVE = ITEMS.registerSimpleBlockItem(ModBlocks.WARP_DRIVE);
     public static final DeferredItem<BlockItem> CRYSTAL_DRIVER = ITEMS.registerSimpleBlockItem(ModBlocks.CRYSTAL_DRIVER);
 
+    // Test Drive: no texture/model yet (see ModBlocks.TEST_DRIVE), but still needs a BlockItem to
+    // exist at all for /give or JEI to find it -- registering the block alone doesn't do this.
+    public static final DeferredItem<BlockItem> TEST_DRIVE = ITEMS.registerSimpleBlockItem(ModBlocks.TEST_DRIVE);
+
     public static void register(net.neoforged.bus.api.IEventBus modEventBus) {
         ITEMS.register(modEventBus);
     }

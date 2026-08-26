@@ -48,6 +48,15 @@ repositories {
         }
         filter { includeGroup("maven.modrinth") }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "CC: Tweaked"
+                url = "https://maven.squiddev.cc"
+            }
+        }
+        filter { includeGroup("cc.tweaked") }
+    }
 }
 
 base {
@@ -170,6 +179,13 @@ dependencies {
     // Dimensional Sableのdev.egg.SubLevelWarperクラス取得用。Cosmonautics同梱版と同一クラスなので
     // 実行時はCosmonauticsが提供、こちらはコンパイル時の型解決だけに使う
     compileOnly("maven.modrinth:Iq9c4mLa:LrkdIDoN")
+
+    // Veil: Sableのforce-group APIの型がVeil独自のRegistryObjectを使ってるため、
+    // コンパイル時だけ必要(実行時はCreate Aeronautics同梱のVeilが既に存在)
+    compileOnly "maven.modrinth:3KUWeVhG:BW93SN6F" // Veil 4.1.2 NeoForge (1.21.1)
+
+    compileOnly "cc.tweaked:cc-tweaked-1.21.1-core-api:1.120.2"
+    compileOnly "cc.tweaked:cc-tweaked-1.21.1-forge-api:1.120.2"
 
 }
 

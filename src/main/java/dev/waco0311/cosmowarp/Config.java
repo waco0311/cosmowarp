@@ -28,7 +28,7 @@ public class Config {
     // --- Test Drive (working name; inertial/momentum-triggered warp, no crystal, FE only) ---
     public static final ModConfigSpec.LongValue TEST_DRIVE_COST_FE = BUILDER
             .comment("FE consumed by a single Test Drive activation")
-            .defineInRange("testDriveCostFE", 8_000_000L, 0L, Integer.MAX_VALUE);
+            .defineInRange("warpCostFE", 2_000_000L, 0L, Integer.MAX_VALUE);
 
     // --- Warp Drive console display (liquid-crystal panel text) ---
     public enum DisplayMode { FE, COUNTDOWN, COORDINATES, POINT_NAME }
@@ -40,6 +40,22 @@ public class Config {
     public static final ModConfigSpec.DoubleValue TEST_DRIVE_MIN_SPEED = BUILDER
             .comment("Minimum ship speed (blocks/tick) required, while armed, for a redstone pulse to trigger a Test Drive warp")
             .defineInRange("testDriveMinSpeed", 0.5, 0.0, 100.0);
+
+    public static final ModConfigSpec.DoubleValue TEST_DRIVE_THROTTLE_FRACTION = BUILDER
+            .comment("Fraction of the ship's own propulsion force allowed through while a Test Drive is armed; the rest is cancelled every physics substep, producing the slow \"crouching start\" drift while charging")
+            .defineInRange("testDriveThrottleFraction", 1.0 / 30.0, 0.0, 1.0);
+
+    public static final ModConfigSpec.IntValue TEST_DRIVE_MAX_CHARGE_TICKS = BUILDER
+            .comment("Charge cap in ticks; jump distance scales linearly from 0 up to testDriveMaxJumpDistance as charge approaches this")
+            .defineInRange("testDriveMaxChargeTicks", 200, 1, 24000);
+
+    public static final ModConfigSpec.IntValue TEST_DRIVE_FIRE_DELAY_TICKS = BUILDER
+            .comment("Delay (ticks) between the top-face signal being detected and the jump actually executing. Kept longer than a vanilla button's own auto-reset time (stone: 20 ticks, wood: 30 ticks) on purpose, so the button has already popped back up on its own before the structure (and the button along with it) gets relocated -- otherwise the button's own \"pop back up\" schedule gets lost in the move and it stays stuck pressed. Also doubles as a natural place to eventually hang a charge-up visual effect.")
+            .defineInRange("testDriveFireDelayTicks", 40, 0, 24000);
+
+    public static final ModConfigSpec.DoubleValue TEST_DRIVE_MAX_JUMP_DISTANCE = BUILDER
+            .comment("Distance in blocks covered by a fully-charged Test Drive jump")
+            .defineInRange("testDriveMaxJumpDistance", 500.0, 1.0, 1_000_000.0);
 
     // --- Memory Card (cheap, non-Moon-derived recording medium; can register/store points but
     // cannot itself trigger a warp -- use a Crystal Driver to move points onto a real Warp Crystal) ---

@@ -2,6 +2,7 @@ package dev.waco0311.cosmowarp.registry;
 
 import dev.waco0311.cosmowarp.Cosmonauticswarpdrive;
 import dev.waco0311.cosmowarp.block.CrystalDriverBlock;
+import dev.waco0311.cosmowarp.block.TestDriveBlock;
 import dev.waco0311.cosmowarp.block.WarpDriveBlock;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
@@ -32,6 +33,15 @@ public class ModBlocks {
 
     public static final DeferredBlock<CrystalDriverBlock> CRYSTAL_DRIVER = BLOCKS.register("crystal_driver",
             () -> new CrystalDriverBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .requiresCorrectToolForDrops()
+                    .strength(5f, 6f)));
+
+    // Not yet added to ModCreativeTab -- texture/model still TBD, same as the other placeholder
+    // blocks were before their real appearance existed. Strength/tool tier mirrors Warp Drive for
+    // now; adjust once the real design is settled.
+    public static final DeferredBlock<TestDriveBlock> TEST_DRIVE = BLOCKS.register("test_drive",
+            () -> new TestDriveBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
                     .requiresCorrectToolForDrops()
                     .strength(5f, 6f)));

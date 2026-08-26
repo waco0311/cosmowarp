@@ -2,6 +2,7 @@ package dev.waco0311.cosmowarp.registry;
 
 import dev.waco0311.cosmowarp.Cosmonauticswarpdrive;
 import dev.waco0311.cosmowarp.block.entity.CrystalDriverBlockEntity;
+import dev.waco0311.cosmowarp.block.entity.TestDriveBlockEntity;
 import dev.waco0311.cosmowarp.block.entity.WarpDriveBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,6 +23,11 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("crystal_driver", () -> new BlockEntityType<>(
                     (pos, state) -> new CrystalDriverBlockEntity(ModBlockEntities.CRYSTAL_DRIVER.get(), pos, state),
                     java.util.Set.of(ModBlocks.CRYSTAL_DRIVER.get()), null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TestDriveBlockEntity>> TEST_DRIVE =
+            BLOCK_ENTITIES.register("test_drive", () -> new BlockEntityType<>(
+                    (pos, state) -> new TestDriveBlockEntity(ModBlockEntities.TEST_DRIVE.get(), pos, state),
+                    java.util.Set.of(ModBlocks.TEST_DRIVE.get()), null));
 
     public static void register(net.neoforged.bus.api.IEventBus modEventBus) {
         BLOCK_ENTITIES.register(modEventBus);

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cosmowarp:block/test_drive_side",
+    "down": "cosmowarp:block/test_drive_bottom",
+    "up": "cosmowarp:block/test_drive_top",
+    "north": "cosmowarp:block/test_drive_front",
+    "south": "cosmowarp:block/test_drive_back",
+    "east": "cosmowarp:block/test_drive_side",
+    "west": "cosmowarp:block/test_drive_side"
+  }
+}
